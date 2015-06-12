@@ -10,7 +10,6 @@ var cat = dom('.cat')[0];
 stream.pipe(through(function(state, enc, next) {
   // get current position from server
   var position = JSON.parse(state);
-  console.log('position array: ', position);
 
   // set cat x and y coordinates based on position
   cat.setAttribute('x', position[0] + '%');

@@ -4,8 +4,8 @@ var browserify = require('browserify');
 var websocket = require('websocket-stream');
 var through = require('through2');
 var mod = require('mod-op');
-var Observ = require('observ');
-var ObservStream = require('observ-stream');
+var observ = require('observ');
+var observStream = require('observ-stream');
 
 
 var staticHandler = ecstatic('./');
@@ -19,16 +19,19 @@ var httpHandler = function(req, res) {
 
 var httpServer = http.createServer(httpHandler);
 
-var position = [25, 25];
+var initialPosition = [50, 50];
+var positionObserv = observ(initialPosition);
+var positionStream = observStream(
+  positionObserv, { objectMode: false }
+);
 
-var handleActions = function(stream) {
+var handleActions = function(positionObserv) {
   return through(function(buf, enc, next) {
     // get incoming key
     var key = buf.toString();
-    console.log('key', key);
 
     // get current position
-    var pos = position;
+    var pos = positionObserv();
     // update position based on key
     switch (key) {
       case 'right':
@@ -46,18 +49,18 @@ var handleActions = function(stream) {
       default:
         return next();
     }
-    console.log('position', pos);
-    // write new position
-    stream.write(JSON.stringify(pos));
+    // set new position
+    positionObserv.set(pos);
     next();
   });
 };
 
 var wsHandler = function(stream) {
-  console.log('new connection!');
+  var position = positionObserv();
   stream.write(JSON.stringify(position));
   // pipe data from client to stdout
-  stream.pipe(handleActions(stream));
+  positionStream.pipe(stream);
+  stream.pipe(handleActions(positionObserv));
 };
 
 
