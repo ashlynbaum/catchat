@@ -22,5 +22,5 @@ stream.pipe(through(function(state, enc, next) {
 dom(document).on('keydown', function(ev) {
   // get key name from keydown event
   var key = codeToKey(ev);
-  console.log('key', key);
+  stream.write(key);
 });
