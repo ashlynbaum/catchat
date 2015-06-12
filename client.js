@@ -1,6 +1,7 @@
 var websocket = require('websocket-stream');
 var through = require('through2');
 var dom = require('domquery');
+var codeToKey = require('keycode');
 
 var stream = websocket('ws://' + location.host + '/');
 
@@ -17,3 +18,9 @@ stream.pipe(through(function(state, enc, next) {
 
   next();
 }));
+
+dom(document).on('keydown', function(ev) {
+  // get key name from keydown event
+  var key = codeToKey(ev);
+  console.log('key', key);
+});
