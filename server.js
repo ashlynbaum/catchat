@@ -18,7 +18,7 @@ var httpServer = http.createServer(httpHandler);
 
 var position = [25, 25];
 
-var handleActions = function() {
+var handleActions = function(stream) {
   return through(function(buf, enc, next) {
     // get incoming key
     var key = buf.toString();
@@ -44,6 +44,8 @@ var handleActions = function() {
         return next();
     }
     console.log('position', pos);
+    // write new position
+    stream.write(JSON.stringify(pos));
     next();
   });
 };
@@ -52,7 +54,7 @@ var wsHandler = function(stream) {
   console.log('new connection!');
   stream.write(JSON.stringify(position));
   // pipe data from client to stdout
-  stream.pipe(handleActions());
+  stream.pipe(handleActions(stream));
 };
 
 
