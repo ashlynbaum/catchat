@@ -4,6 +4,9 @@ var browserify = require('browserify');
 var websocket = require('websocket-stream');
 var through = require('through2');
 var mod = require('mod-op');
+var Observ = require('observ');
+var ObservStream = require('observ-stream');
+
 
 var staticHandler = ecstatic('./');
 var httpHandler = function(req, res) {
