@@ -14,8 +14,10 @@ function httpHandler (req, res) {
 
 var httpServer = http.createServer(httpHandler);
 
+var position = [25, 25];
 function wsHandler(stream) {
   console.log('new connection!');
+  stream.write(JSON.stringify(position));
 }
 
 websocket.createServer({
