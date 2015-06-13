@@ -3,7 +3,7 @@ var through = require('through2');
 var dom = require('domquery');
 var codeToKey = require('keycode');
 
-var stream = websocket('ws://' + location.host + '/');
+var stream = websocket('wss://' + location.host + '/');
 
 var cat = dom('.cat')[0];
 
