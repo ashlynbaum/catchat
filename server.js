@@ -68,5 +68,5 @@ websocket.createServer({
   server: httpServer
 }, wsHandler);
 
-
+var port = process.env.PORT || 5000;
 httpServer.listen(port);
